@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="css/mui.css"/>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<h1 class="mui-title">加入我们的帮派</h1>
+	</header>
+	<div class="mui-content">
+		<div class="mui-row" style="margin-top: 25px;text-align: center;">
+			<img src="img/2.jpg" style="width: 150px;height:150px;border-radius: 50%;" id="avatar">
+			<p>请点击修改用户头像<p>
+		</div>
+		<form class="mui-input-group" style="margin-top: 25px;">
+			<div class="mui-input-row">
+				<label>用户名</label>
+			<input type="text" id="username" class="mui-input-clear" placeholder="请输入用户名">
+			</div>
+			<div class="mui-input-row">
+				<label>密码</label>
+				<input type="password" id="password" class="mui-input-password" placeholder="请输入密码">
+			</div>
+			<div class="mui-input-row">
+				<label>同上</label>
+				<input type="password" id="repassword" class="mui-input-password" placeholder="请再次输入密码">
+			</div>
+			<div class="mui-input-row">
+				<label>网名儿</label>
+			<input type="text" id="nickname" class="mui-input-clear" placeholder="请输入用户名">
+			</div>
+			<div class="mui-input-row mui-radio mui-left ">
+				<label>我是妈妈</label>
+				<input name="gender" type="radio" checked value="1">
+			</div>
+			<div class="mui-input-row mui-radio mui-left ">
+				<label>我是爸爸</label>
+				<input name="gender" type="radio" value="2">
+			</div>
+			<div class="mui-button-row">
+				<button type="button" class="mui-btn mui-btn-primary" id="reg_btn">确认加入组织</button>
+				<button type="button" class="mui-btn mui-btn-danger mui-action-back" id="register">我再考虑考虑</button>
+			</div>
+		</form>
+	</div>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/md5.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	mui.init();
+	var cmr = null;
+	var avatar_name = null;
+	document.getElementById('avatar').addEventListener('tap',function () {
+	        cmr = plus.camera.getCamera(2);
+			cmr.captureImage(
+			function(file_path){
+				uploder(file_path)
+			}, function(){}, 
+			{filename:"_doc/camera/"},
+			)
+	});
+	
+	function uploder(file_path) {
+		var uploadObj = plus.uploader.createUpload(window.serv+"/avatar_uploader",{},
+		function(upObj, status){
+			if (status == 200){
+				var data = JSON.parse(upObj.responseText);
+				document.getElementById("avatar").src = window.serv_avatar + data.data.filename;
+				avatar_name = data.data.filename;
+			}
+		})
+		
+		uploadObj.addFile(file_path, {key:"avatar"});
+		uploadObj.start();
+	}
+	
+	document.getElementById('reg_btn').addEventListener('tap',function () {
+		var username = document.getElementById('username').value;
+		var password = document.getElementById('password').value;
+		var repassword = document.getElementById('repassword').value;
+		var nickname = document.getElementById('nickname').value;
+		var gender = null;
+		var gender_list = document.getElementsByName("gender");
+		for (var i=0; i < gender_list.length; i++) {
+			if(gender_list[i].checked){
+				gender = gender_list[i].value;
+			}
+		}
+	    
+		if (password != repassword) {
+			mui.toast("2次密码不一致")
+			return
+		}
+		
+		reg_info = {
+			username:username,
+			password:hex_md5(password),
+			nickname:nickname,
+			gender:gender,
+			avatar:avatar_name
+		}
+		mui.post(window.serv+"/reg", reg_info,
+		function(data){
+				mui.toast(data.msg);
+				if (data.code == 0) {
+					mui.back();
+				}
+			},'json'
+		);
+	})
+	</script>
+</body>
+</html>

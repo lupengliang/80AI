@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="css/mui.css"/>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<h1 class="mui-title" id="title"></h1>
+	</header>
+	<div class="mui-content">
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<img class="mui-media-object mui-pull-left" id="avatar" style="border-radius: 50%;">
+					<div class="mui-media-body">
+						<span id="nickname"></span>
+						<p class="mui-ellipsis" id="username"></p>
+					</div>
+				</a>
+			</li>
+		</ul>		<button type="button" class="mui-btn mui-btn-blue mui-btn-block">告辞不送</button>
+		<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a>
+						告辞不送
+					</a>
+				</li>
+		</ul>
+	</div>
+	
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	mui.init();
+	mui.plusReady(function () {
+	    var user_info_wv = plus.webview.currentWebview();
+		document.getElementById("title").innerText = user_info_wv.nickname;
+		document.getElementById("nickname").innerText = user_info_wv.nickname;
+		document.getElementById("username").innerText = user_info_wv.username;
+		document.getElementById("avatar").src = window.serv_avatar + user_info_wv.avatar;
+	})
+	</script>
+</body>
+</html>

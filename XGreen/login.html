@@ -27,10 +27,30 @@
 		</form>
 	</div>
 	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/md5.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 	mui.init();
 	document.getElementById('login').addEventListener('tap',function () {
-	        // 登录按钮
+	        // 登录按钮,发起登录请求
+			mui.post(window.serv+'/login', {
+				username:document.getElementById("username").value,
+				password:hex_md5(document.getElementById("password").value)
+			},function(data){
+				console.log(JSON.stringify(data));
+				mui.toast(data.msg);
+				if(data.code == 0){
+					mui.openWindow({
+						url: "user_info.html",
+						id: "user_info.html",
+						styles:{
+							top: "0px",
+							bottom: "50px"
+						},
+						extras:data.data
+					})
+				}
+			},'json'
+			);
 	});
 	document.getElementById('register').addEventListener('tap',function () {
 	        // 注册按钮，打开注册页面

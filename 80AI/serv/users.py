@@ -24,3 +24,20 @@ def reg():
     RET["data"] = {}
 
     return jsonify(RET)
+
+@user.route('/login', methods=['POST'])
+def login():
+    user_info = request.form.to_dict()
+    # {username:1111,password:2222}
+    user = MongoDB.users.find_one(user_info)
+    user["_id"] = str(user.get("_id"))
+
+    # 删除password key
+    # user = MongoBD.users.find_one(user_info, {"password":0})
+    user.pop("password")
+
+    RET["code"] = 0
+    RET["msg"] = "登录成功"
+    RET["data"] = user
+
+    return jsonify(RET)

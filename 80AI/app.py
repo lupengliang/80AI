@@ -2,7 +2,7 @@ from flask import Flask
 
 from serv.get_anythings import get_anything
 from serv.uploader_anything import up_anything
-from serv.user import user
+from serv.users import user
 
 app = Flask(__name__)
 

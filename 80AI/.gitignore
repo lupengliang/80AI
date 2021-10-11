@@ -2,7 +2,7 @@
 .idea
 .testing.py
 venv/
-
+data/
 *.pyc
 __pycache__/
 .pytest_cache/
